@@ -1,0 +1,13 @@
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\bin\Debug\Mmdo.exe.config
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\bin\Debug\Mmdo.exe
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\bin\Debug\Mmdo.pdb
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\bin\Debug\Newtonsoft.Json.dll
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\bin\Debug\Newtonsoft.Json.xml
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\obj\Debug\Mmdo_Yaroshynskyi.csproj.AssemblyReference.cache
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\obj\Debug\BuilderMmdoCoursework.ApplicationForm.resources
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\obj\Debug\Mmdo.Properties.Resources.resources
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\obj\Debug\Mmdo_Yaroshynskyi.csproj.GenerateResource.cache
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\obj\Debug\Mmdo_Yaroshynskyi.csproj.CoreCompileInputs.cache
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\obj\Debug\Mmdo_Yar.E1BBA2C6.Up2Date
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\obj\Debug\Mmdo.exe
+C:\Users\user\Desktop\Mmdo_Yaroshynskyi\obj\Debug\Mmdo.pdb
