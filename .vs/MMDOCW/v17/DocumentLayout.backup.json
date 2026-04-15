@@ -3,8 +3,12 @@
   "WorkspaceRootPath": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\services\\simplexsolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|b:\\unik\\! 4 course 2 half\\mmdocw\\mmdocwyasv\\services\\simplexsolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|solutionrelative:services\\simplexsolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\services\\simplexsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|solutionrelative:services\\simplexsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\services\\simplexmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -15,12 +19,8 @@
       "RelativeMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|solutionrelative:app.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|b:\\unik\\! 4 course 2 half\\mmdocw\\mmdocwyasv\\app.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\app.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|solutionrelative:app.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\services\\simplexsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9D66A121-9570-411D-8FFF-1577C2712D8C}|MMDOCWYASV.csproj|solutionrelative:services\\simplexsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +34,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "App.Designer.cs",
               "DocumentMoniker": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\App.Designer.cs",
               "RelativeDocumentMoniker": "App.Designer.cs",
@@ -42,44 +42,43 @@
               "RelativeToolTip": "App.Designer.cs",
               "ViewState": "AgIAAJEBAAAAAAAAAAAQwI0DAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-15T20:54:55.842Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-15T20:54:55.842Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "App.cs",
               "DocumentMoniker": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\App.cs",
               "RelativeDocumentMoniker": "App.cs",
               "ToolTip": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\App.cs",
               "RelativeToolTip": "App.cs",
-              "ViewState": "AgIAAHYAAAAAAAAAAAAiwIsAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAHUAAAAAAAAAAADwv4cAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-15T18:14:01.504Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "SimplexModels.cs",
               "DocumentMoniker": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\Services\\SimplexModels.cs",
               "RelativeDocumentMoniker": "Services\\SimplexModels.cs",
               "ToolTip": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\Services\\SimplexModels.cs",
               "RelativeToolTip": "Services\\SimplexModels.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-15T18:12:26.876Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "SimplexSnapshot.cs",
               "DocumentMoniker": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\Services\\SimplexSnapshot.cs",
               "RelativeDocumentMoniker": "Services\\SimplexSnapshot.cs",
               "ToolTip": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\Services\\SimplexSnapshot.cs",
               "RelativeToolTip": "Services\\SimplexSnapshot.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-15T18:07:07.426Z",
               "EditorCaption": ""
@@ -92,7 +91,7 @@
               "RelativeDocumentMoniker": "Services\\SimplexSolver.cs",
               "ToolTip": "B:\\unik\\! 4 course 2 half\\mmdocw\\MMDOCWYASV\\Services\\SimplexSolver.cs",
               "RelativeToolTip": "Services\\SimplexSolver.cs",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAqwHYBAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAF4BAAAAAAAAAAAkwIQBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-15T18:06:50.587Z",
               "EditorCaption": ""

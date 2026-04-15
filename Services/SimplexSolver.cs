@@ -5,415 +5,385 @@ using System.Linq;
 
 namespace BuilderMmdoCoursework.src.Calculator
 {
-    public enum TypeIteration { Unbounded, Found, NotYetFound }
+    public enum StepResult { Unbounded, Found, NotYetFound }
 
     public class SimplexSolver
     {
-        ObjectiveFunction function;
-
-        double[] functionVariables;
+        ObjectiveFunction _function;
+        double[] _objectiveCoeffs;
         double[][] _tableau;
-        double[] xVals;
-        bool[] isMarr;
-        double[] Mcal;
+        double[] _bValues;
+        bool[] _isArtificial;
+        double[] _mRow;
         double[] _zRow;
-        int[] xData;
-        bool mFound = false;
-
+        int[] _basicVars;
+        bool _artificialPhaseComplete = false;
 
         public SimplexSolver(ObjectiveFunction function, LinearConstraint[] constraints)
         {
-            this.function = function;
+            _function = function;
 
-
-            BuildInitialTableau(constraints);
-            getFunctionArray();
-            CalculateDeltas();
+            InitializeTableau(constraints);
+            SetupObjectiveFunction();
+            CalculateEvaluations();
 
             for (int i = 0; i < _zRow.Length; i++)
             {
-                _zRow[i] = -functionVariables[i];
+                _zRow[i] = -_objectiveCoeffs[i];
             }
-
         }
 
         public SimplexSolver(SimplexSnapshot screenshot, ObjectiveFunction function)
         {
-            this.xVals = screenshot.b;
-            this._tableau = screenshot.matrix;
-            this.Mcal = screenshot.M;
-            this._zRow = screenshot.F;
-            this.xData = screenshot.C;
-            this.functionVariables = screenshot.fVars;
-            this.isMarr = screenshot.m;
+            _bValues = screenshot.b;
+            _tableau = screenshot.matrix;
+            _mRow = screenshot.M;
+            _zRow = screenshot.F;
+            _basicVars = screenshot.C;
+            _objectiveCoeffs = screenshot.fVars;
+            _isArtificial = screenshot.m;
+            _function = function;
 
-            this.function = function;
-
-
-            getFunctionArray();
-            CalculateDeltas();
+            SetupObjectiveFunction();
+            CalculateEvaluations();
 
             for (int i = 0; i < _zRow.Length; i++)
             {
-                _zRow[i] = -functionVariables[i];
+                _zRow[i] = -_objectiveCoeffs[i];
             }
         }
 
-        public ObjectiveFunction GetFunction() { return function; }
-
+        public ObjectiveFunction GetFunction() { return _function; }
 
         public List<SimplexStep> GetResultTable()
         {
-            var allTables = new List<SimplexStep>();
+            var iterations = new List<SimplexStep>();
 
-            var initialTable = new SimplexSnapshot(xVals, _tableau, Mcal, _zRow, xData, functionVariables, mFound, isMarr);
-            SimplexStep tableData = (new SimplexStep(initialTable, TypeIteration.NotYetFound));
-            allTables.Add(tableData);
+            var initialSnapshot = new SimplexSnapshot(_bValues, _tableau, _mRow, _zRow, _basicVars, _objectiveCoeffs, _artificialPhaseComplete, _isArtificial);
+            iterations.Add(new SimplexStep(initialSnapshot, StepResult.NotYetFound));
 
-            PivotCoordinates result = FindPivotElement();
+            PivotCoordinates pivot = FindPivot();
+            int iterationLimit = 0;
 
-            int iterationCount = 0;
-            while (result.result == TypeIteration.NotYetFound && iterationCount < 100)
+            while (pivot.Status == StepResult.NotYetFound && iterationLimit < 100)
             {
-                PerformPivotOperation(result.index);
-                SimplexSnapshot table = new SimplexSnapshot(xVals, _tableau, Mcal, _zRow, xData, functionVariables, mFound, isMarr);
-                result = FindPivotElement();
+                PerformPivot(pivot.Position);
+                SimplexSnapshot currentSnapshot = new SimplexSnapshot(_bValues, _tableau, _mRow, _zRow, _basicVars, _objectiveCoeffs, _artificialPhaseComplete, _isArtificial);
+                pivot = FindPivot();
 
-                tableData = (new SimplexStep(table, result.result));
-
-                allTables.Add(tableData);
-                iterationCount++;
+                iterations.Add(new SimplexStep(currentSnapshot, pivot.Status));
+                iterationLimit++;
             }
 
-            return allTables;
+            return iterations;
         }
 
-        void PerformPivotOperation(Tuple<int, int> cellCoordinates)
+        void PerformPivot(Tuple<int, int> pivotCoords)
         {
-            double[][] newMatrix = new double[_tableau.Length][];
+            int pivotCol = pivotCoords.Item1;
+            int pivotRow = pivotCoords.Item2;
 
-            xData[cellCoordinates.Item2] = cellCoordinates.Item1;
+            // В оригіналі матриця зберігається як [стовпець][рядок]
+            double pivotValue = _tableau[pivotCol][pivotRow];
 
-            double[] newJRow = new double[_tableau.Length];
+            double[][] nextTableau = new double[_tableau.Length][];
+            _basicVars[pivotRow] = pivotCol;
 
+            double[] normalizedRow = new double[_tableau.Length];
             for (int i = 0; i < _tableau.Length; i++)
             {
-                newJRow[i] = _tableau[i][cellCoordinates.Item2] / _tableau[cellCoordinates.Item1][cellCoordinates.Item2];
+                normalizedRow[i] = _tableau[i][pivotRow] / pivotValue;
             }
 
-            double[] newB = new double[xVals.Length];
-
-            for (int i = 0; i < xVals.Length; i++)
+            double[] nextBValues = new double[_bValues.Length];
+            for (int i = 0; i < _bValues.Length; i++)
             {
-                if (i == cellCoordinates.Item2)
+                if (i == pivotRow)
                 {
-                    newB[i] = xVals[i] / _tableau[cellCoordinates.Item1][cellCoordinates.Item2];
+                    nextBValues[i] = _bValues[i] / pivotValue;
                 }
                 else
                 {
-                    newB[i] = xVals[i] - xVals[cellCoordinates.Item2] / _tableau[cellCoordinates.Item1][cellCoordinates.Item2] * _tableau[cellCoordinates.Item1][i];
+                    nextBValues[i] = _bValues[i] - (_bValues[pivotRow] / pivotValue) * _tableau[pivotCol][i];
                 }
             }
 
-            xVals = newB;
+            _bValues = nextBValues;
 
             for (int i = 0; i < _tableau.Length; i++)
             {
-                newMatrix[i] = new double[xData.Length];
-                for (int j = 0; j < xData.Length; j++)
+                nextTableau[i] = new double[_basicVars.Length];
+                for (int j = 0; j < _basicVars.Length; j++)
                 {
-                    if (j == cellCoordinates.Item2)
+                    if (j == pivotRow)
                     {
-                        newMatrix[i][j] = newJRow[i];
+                        nextTableau[i][j] = normalizedRow[i];
                     }
                     else
                     {
-                        newMatrix[i][j] = _tableau[i][j] - newJRow[i] * _tableau[cellCoordinates.Item1][j];
+                        nextTableau[i][j] = _tableau[i][j] - normalizedRow[i] * _tableau[pivotCol][j];
                     }
                 }
             }
 
-            _tableau = newMatrix;
-            CalculateDeltas();
+            _tableau = nextTableau;
+            CalculateEvaluations();
         }
 
-
-        void CalculateDeltas()
+        void CalculateEvaluations()
         {
-            Mcal = new double[_tableau.Length];
+            _mRow = new double[_tableau.Length];
             _zRow = new double[_tableau.Length];
 
             for (int i = 0; i < _tableau.Length; i++)
             {
-                double sumF = 0;
+                double sumZ = 0;
                 double sumM = 0;
 
                 for (int j = 0; j < _tableau.First().Length; j++)
                 {
-                    if (isMarr[xData[j]])
+                    if (_isArtificial[_basicVars[j]])
                     {
                         sumM -= _tableau[i][j];
                     }
                     else
                     {
-                        sumF += functionVariables[xData[j]] * _tableau[i][j];
+                        sumZ += _objectiveCoeffs[_basicVars[j]] * _tableau[i][j];
                     }
                 }
 
-                Mcal[i] = isMarr[i] ? sumM + 1 : sumM;
-                _zRow[i] = sumF - functionVariables[i];
+                _mRow[i] = _isArtificial[i] ? sumM + 1 : sumM;
+                _zRow[i] = sumZ - _objectiveCoeffs[i];
             }
         }
 
-
-        PivotCoordinates FindPivotElement()
+        PivotCoordinates FindPivot()
         {
-            int columnM = GetEnteringVariable(Mcal);
+            int enteringColM = GetEnteringVariable(_mRow);
 
-            if (mFound || columnM == -1)
+            if (_artificialPhaseComplete || enteringColM == -1)
             {
-                mFound = true;
-                int f = GetEnteringVariable(_zRow);
+                _artificialPhaseComplete = true;
+                int enteringColZ = GetEnteringVariable(_zRow);
 
-                if (f != -1)
+                if (enteringColZ != -1)
                 {
-                    int row = GetLeavingVariable(_tableau[f], xVals);
-                    if (row != -1)
-                        return new PivotCoordinates(new Tuple<int, int>(f, row), TypeIteration.NotYetFound);
+                    int leavingRow = GetLeavingVariable(_tableau[enteringColZ], _bValues);
+                    if (leavingRow != -1)
+                        return new PivotCoordinates(new Tuple<int, int>(enteringColZ, leavingRow), StepResult.NotYetFound);
                     else
-                        return new PivotCoordinates(null, TypeIteration.Unbounded);
+                        return new PivotCoordinates(null, StepResult.Unbounded);
                 }
                 else
-                    return new PivotCoordinates(null, TypeIteration.Found);
+                    return new PivotCoordinates(null, StepResult.Found);
             }
             else
             {
-                int row = GetLeavingVariable(_tableau[columnM], xVals);
+                int leavingRow = GetLeavingVariable(_tableau[enteringColM], _bValues);
 
-                if (row != -1)
+                if (leavingRow != -1)
                 {
-                    return new PivotCoordinates(new Tuple<int, int>(columnM, row), TypeIteration.NotYetFound);
+                    return new PivotCoordinates(new Tuple<int, int>(enteringColM, leavingRow), StepResult.NotYetFound);
                 }
                 else
                 {
-                    return new PivotCoordinates(null, TypeIteration.Unbounded);
+                    return new PivotCoordinates(null, StepResult.Unbounded);
                 }
             }
         }
 
-        int GetEnteringVariable(double[] array)
+        int GetEnteringVariable(double[] evaluations)
         {
-            int index = -1;
+            int bestIndex = -1;
 
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < evaluations.Length; i++)
             {
-                if (array[i] < 0)
+                if (evaluations[i] < 0)
                 {
-                    if (!mFound || mFound && !isMarr[i])
+                    if (!_artificialPhaseComplete || (_artificialPhaseComplete && !_isArtificial[i]))
                     {
-                        if (index == -1)
+                        if (bestIndex == -1)
                         {
-                            index = i;
+                            bestIndex = i;
                         }
-                        else if (Math.Abs(array[i]) > Math.Abs(array[index]))
+                        else if (Math.Abs(evaluations[i]) > Math.Abs(evaluations[bestIndex]))
                         {
-                            index = i;
+                            bestIndex = i;
                         }
                     }
-
                 }
             }
-            return index;
+            return bestIndex;
         }
 
-        int GetLeavingVariable(double[] column, double[] b)
+        int GetLeavingVariable(double[] column, double[] bounds)
         {
-            int index = -1;
+            int bestIndex = -1;
 
             for (int i = 0; i < column.Length; i++)
             {
-                if (column[i] > 0 && b[i] > 0)
+                if (column[i] > 0 && bounds[i] > 0)
                 {
-                    if (index == -1)
+                    if (bestIndex == -1)
                     {
-                        index = i;
+                        bestIndex = i;
                     }
-                    else if (b[i] / column[i] < b[index] / column[index])
+                    else if (bounds[i] / column[i] < bounds[bestIndex] / column[bestIndex])
                     {
-                        index = i;
+                        bestIndex = i;
                     }
                 }
             }
 
-            return index;
+            return bestIndex;
         }
 
-
-        public void getFunctionArray()
+        public void SetupObjectiveFunction()
         {
-            double[] funcVars = new double[_tableau.Length];
+            double[] expandedVars = new double[_tableau.Length];
             for (int i = 0; i < _tableau.Length; i++)
             {
-                funcVars[i] = i < function.variables.Length ? function.variables[i] : 0;
+                expandedVars[i] = i < _function.Variables.Length ? _function.Variables[i] : 0;
             }
-            this.functionVariables = funcVars;
+            _objectiveCoeffs = expandedVars;
         }
 
-        double[][] appendColumn(double[][] matrix, double[] column)
+        double[][] AddColumn(double[][] matrix, double[] column)
         {
-            double[][] newMatrix = new double[matrix.Length + 1][];
+            double[][] resultMatrix = new double[matrix.Length + 1][];
             for (int i = 0; i < matrix.Length; i++)
             {
-                newMatrix[i] = matrix[i];
+                resultMatrix[i] = matrix[i];
             }
-            newMatrix[matrix.Length] = column;
-            return newMatrix;
+            resultMatrix[matrix.Length] = column;
+            return resultMatrix;
         }
 
-        T[] append<T>(T[] array, T element)
+        T[] AddElement<T>(T[] array, T element)
         {
-            T[] newArray = new T[array.Length + 1];
+            T[] resultArray = new T[array.Length + 1];
             for (int i = 0; i < array.Length; i++)
             {
-                newArray[i] = array[i];
+                resultArray[i] = array[i];
             }
-            newArray[array.Length] = element;
-            return newArray;
+            resultArray[array.Length] = element;
+            return resultArray;
         }
 
-        double[] getColumn(double value, int place, int length)
+        double[] CreateUnitVector(double value, int position, int length)
         {
-            double[] newColumn = new double[length];
-
+            double[] vector = new double[length];
             for (int k = 0; k < length; k++)
             {
-                newColumn[k] = k == place ? value : 0;
+                vector[k] = k == position ? value : 0;
             }
-
-            return newColumn;
+            return vector;
         }
 
-        public void BuildInitialTableau(LinearConstraint[] constraints)
+        public void InitializeTableau(LinearConstraint[] constraints)
         {
-            double[][] matrix = new double[constraints.First().vars.Length][];
+            double[][] tempMatrix = new double[constraints.First().Coefficients.Length][];
 
-            for (int i = 0; i < constraints.First().vars.Length; i++)
+            for (int i = 0; i < constraints.First().Coefficients.Length; i++)
             {
-                matrix[i] = new double[constraints.Length];
+                tempMatrix[i] = new double[constraints.Length];
                 for (int j = 0; j < constraints.Length; j++)
                 {
-                    matrix[i][j] = constraints[j].vars[i];
+                    tempMatrix[i][j] = constraints[j].Coefficients[i];
                 }
             }
 
-            double[][] appendixMatrix = new double[0][];
-            double[] Bs = new double[constraints.Length];
+            double[][] slackMatrix = new double[0][];
+            double[] bounds = new double[constraints.Length];
 
             for (int i = 0; i < constraints.Length; i++)
             {
-                LinearConstraint current = constraints[i];
-
-                Bs[i] = current.b;
-
-                {
-                    appendixMatrix = appendColumn(appendixMatrix, getColumn(1, i, constraints.Length));
-                }
+                bounds[i] = constraints[i].Limit;
+                slackMatrix = AddColumn(slackMatrix, CreateUnitVector(1, i, constraints.Length));
             }
 
-            double[][] newMatrix = new double[constraints.First().vars.Length + appendixMatrix.Length][];
+            double[][] fullMatrix = new double[constraints.First().Coefficients.Length + slackMatrix.Length][];
 
-            for (int i = 0; i < constraints.First().vars.Length; i++)
+            for (int i = 0; i < constraints.First().Coefficients.Length; i++)
             {
-                newMatrix[i] = matrix[i];
+                fullMatrix[i] = tempMatrix[i];
             }
 
-            for (int i = constraints.First().vars.Length; i < constraints.First().vars.Length + appendixMatrix.Length; i++)
+            for (int i = constraints.First().Coefficients.Length; i < constraints.First().Coefficients.Length + slackMatrix.Length; i++)
             {
-                newMatrix[i] = appendixMatrix[i - constraints.First().vars.Length];
+                fullMatrix[i] = slackMatrix[i - constraints.First().Coefficients.Length];
             }
 
-            bool[] hasBasicVar = new bool[constraints.Length];
-
+            bool[] isBasicFound = new bool[constraints.Length];
             for (int i = 0; i < constraints.Length; i++)
             {
-                hasBasicVar[i] = false;
+                isBasicFound[i] = false;
             }
 
-            xData = new int[constraints.Length];
+            _basicVars = new int[constraints.Length];
 
-            int ci = 0;
-            for (int i = 0; i < newMatrix.Length; i++)
+            int basicCount = 0;
+            for (int i = 0; i < fullMatrix.Length; i++)
             {
-
-
-                bool hasOnlyNulls = true;
+                bool onlyZeros = true;
                 bool hasOne = false;
-                Tuple<int, int> onePosition = new Tuple<int, int>(0, 0);
+                Tuple<int, int> onePos = new Tuple<int, int>(0, 0);
+
                 for (int j = 0; j < constraints.Length; j++)
                 {
-
-
-                    if (newMatrix[i][j] == 1)
+                    if (fullMatrix[i][j] == 1)
                     {
                         if (hasOne)
                         {
-                            hasOnlyNulls = false;
+                            onlyZeros = false;
                             break;
                         }
                         else
                         {
                             hasOne = true;
-                            onePosition = new Tuple<int, int>(i, j);
+                            onePos = new Tuple<int, int>(i, j);
                         }
                     }
-                    else if (newMatrix[i][j] != 0)
+                    else if (fullMatrix[i][j] != 0)
                     {
-                        hasOnlyNulls = false;
+                        onlyZeros = false;
                         break;
                     }
-
-
                 }
 
-                if (hasOnlyNulls && hasOne)
+                if (onlyZeros && hasOne)
                 {
-                    hasBasicVar[onePosition.Item2] = true;
-                    xData[ci] = onePosition.Item1;
-                    ci++;
+                    isBasicFound[onePos.Item2] = true;
+                    _basicVars[basicCount] = onePos.Item1;
+                    basicCount++;
                 }
-
             }
 
-            isMarr = new bool[newMatrix.Length];
-
-            for (int i = 0; i < newMatrix.Length; i++)
+            _isArtificial = new bool[fullMatrix.Length];
+            for (int i = 0; i < fullMatrix.Length; i++)
             {
-                isMarr[i] = false;
+                _isArtificial[i] = false;
             }
 
             for (int i = 0; i < constraints.Length; i++)
             {
-
-                if (!hasBasicVar[i])
+                if (!isBasicFound[i])
                 {
-
-                    double[] basicColumn = new double[constraints.Length];
-
+                    double[] artificialCol = new double[constraints.Length];
                     for (int j = 0; j < constraints.Length; j++)
                     {
-                        basicColumn[j] = j == i ? 1 : 0;
+                        artificialCol[j] = j == i ? 1 : 0;
                     }
 
-                    newMatrix = appendColumn(newMatrix, basicColumn);
-                    isMarr = append(isMarr, true);
-                    xData[ci] = newMatrix.Length - 1;
-                    ci++;
+                    fullMatrix = AddColumn(fullMatrix, artificialCol);
+                    _isArtificial = AddElement(_isArtificial, true);
+                    _basicVars[basicCount] = fullMatrix.Length - 1;
+                    basicCount++;
                 }
-
             }
 
-            this.xVals = Bs;
-            this._tableau = newMatrix;
+            _bValues = bounds;
+            _tableau = fullMatrix;
         }
     }
 }

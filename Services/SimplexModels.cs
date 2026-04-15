@@ -5,47 +5,47 @@ namespace Mmdo.Services
 {
     public class LinearConstraint
     {
-        public double[] vars;
-        public double b;
+        public double[] Coefficients;
+        public double Limit;
 
-        public LinearConstraint(double[] vars, double b)
+        public LinearConstraint(double[] coefficients, double limit)
         {
-            this.vars = vars;
-            this.b = b;
+            Coefficients = coefficients;
+            Limit = limit;
         }
     }
 
     public class ObjectiveFunction
     {
-        public double[] variables;
+        public double[] Variables;
 
         public ObjectiveFunction(double[] variables)
         {
-            this.variables = variables;
+            Variables = variables;
         }
     }
 
     public class PivotCoordinates
     {
-        public Tuple<int, int> index;
-        public TypeIteration result;
+        public Tuple<int, int> Position;
+        public StepResult Status;
 
-        public PivotCoordinates(Tuple<int, int> index, TypeIteration result)
+        public PivotCoordinates(Tuple<int, int> position, StepResult status)
         {
-            this.index = index;
-            this.result = result;
+            Position = position;
+            Status = status;
         }
     }
 
     public class SimplexStep
     {
-        public SimplexSnapshot table;
-        public TypeIteration resType;
+        public SimplexSnapshot Snapshot;
+        public StepResult ResultType;
 
-        public SimplexStep(SimplexSnapshot tableScreenshot, TypeIteration result)
+        public SimplexStep(SimplexSnapshot snapshot, StepResult resultType)
         {
-            table = tableScreenshot;
-            resType = result;
+            Snapshot = snapshot;
+            ResultType = resultType;
         }
     }
 }

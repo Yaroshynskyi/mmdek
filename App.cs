@@ -68,7 +68,7 @@ namespace BuilderMmdoCoursework
         void ShowTable()
         {
             SolutionGrid.Rows.Clear();
-            SimplexSnapshot snap = selectedTable.table;
+            SimplexSnapshot snap = selectedTable.Snapshot;
 
             int addRows = 3;
 
@@ -133,7 +133,7 @@ namespace BuilderMmdoCoursework
 
         void ShowFinalAnswer()
         {
-            if (AllIterations.Last().resType != TypeIteration.Found)
+            if (AllIterations.Last().ResultType != StepResult.Found)
             {
                 Result.Text = "Рішення не знайдено";
             }
@@ -141,7 +141,7 @@ namespace BuilderMmdoCoursework
             {
                 Result.Text =
                     $"\nX1 = {Round(GetX(0))}, X2 = {Round(GetX(1))}, " +
-                    $"Fmax = {Math.Abs(Round(AllIterations.Last().table.fValue))}";
+                    $"Fmax = {Math.Abs(Round(AllIterations.Last().Snapshot.fValue))}";
             }
         }
 
@@ -153,7 +153,7 @@ namespace BuilderMmdoCoursework
 
         double GetX(int id)
         {
-            SimplexSnapshot result = AllIterations.Last().table;
+            SimplexSnapshot result = AllIterations.Last().Snapshot;
             for (int i = 0; i < result.C.Length; i++)
             {
                 if (result.C[i] == id)
