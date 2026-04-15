@@ -9,40 +9,40 @@ namespace BuilderMmdoCoursework.src.Calculator
 
     public class SimplexSolver
     {
-        TargetFunction function;
+        ObjectiveFunction function;
 
         double[] functionVariables;
-        double[][] matrixData;
+        double[][] _tableau;
         double[] xVals;
         bool[] isMarr;
         double[] Mcal;
-        double[] funcRow;
+        double[] _zRow;
         int[] xData;
         bool mFound = false;
 
 
-        public SimplexSolver(TargetFunction function, Constraint[] constraints)
+        public SimplexSolver(ObjectiveFunction function, LinearConstraint[] constraints)
         {
             this.function = function;
 
 
-            getMatrix(constraints);
+            BuildInitialTableau(constraints);
             getFunctionArray();
-            CountFuncRowValues();
+            CalculateDeltas();
 
-            for (int i = 0; i < funcRow.Length; i++)
+            for (int i = 0; i < _zRow.Length; i++)
             {
-                funcRow[i] = -functionVariables[i];
+                _zRow[i] = -functionVariables[i];
             }
 
         }
 
-        public SimplexSolver(SimplexSnapshot screenshot, TargetFunction function)
+        public SimplexSolver(SimplexSnapshot screenshot, ObjectiveFunction function)
         {
             this.xVals = screenshot.b;
-            this.matrixData = screenshot.matrix;
+            this._tableau = screenshot.matrix;
             this.Mcal = screenshot.M;
-            this.funcRow = screenshot.F;
+            this._zRow = screenshot.F;
             this.xData = screenshot.C;
             this.functionVariables = screenshot.fVars;
             this.isMarr = screenshot.m;
@@ -51,35 +51,35 @@ namespace BuilderMmdoCoursework.src.Calculator
 
 
             getFunctionArray();
-            CountFuncRowValues();
+            CalculateDeltas();
 
-            for (int i = 0; i < funcRow.Length; i++)
+            for (int i = 0; i < _zRow.Length; i++)
             {
-                funcRow[i] = -functionVariables[i];
+                _zRow[i] = -functionVariables[i];
             }
         }
 
-        public TargetFunction GetFunction() { return function; }
+        public ObjectiveFunction GetFunction() { return function; }
 
 
-        public List<IterationData> GetResultTable()
+        public List<SimplexStep> GetResultTable()
         {
-            var allTables = new List<IterationData>();
+            var allTables = new List<SimplexStep>();
 
-            var initialTable = new SimplexSnapshot(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
-            IterationData tableData = (new IterationData(initialTable, TypeIteration.NotYetFound));
+            var initialTable = new SimplexSnapshot(xVals, _tableau, Mcal, _zRow, xData, functionVariables, mFound, isMarr);
+            SimplexStep tableData = (new SimplexStep(initialTable, TypeIteration.NotYetFound));
             allTables.Add(tableData);
 
-            VectorElement result = SelectElement();
+            PivotCoordinates result = FindPivotElement();
 
             int iterationCount = 0;
             while (result.result == TypeIteration.NotYetFound && iterationCount < 100)
             {
-                SolveMatrix(result.index);
-                SimplexSnapshot table = new SimplexSnapshot(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
-                result = SelectElement();
+                PerformPivotOperation(result.index);
+                SimplexSnapshot table = new SimplexSnapshot(xVals, _tableau, Mcal, _zRow, xData, functionVariables, mFound, isMarr);
+                result = FindPivotElement();
 
-                tableData = (new IterationData(table, result.result));
+                tableData = (new SimplexStep(table, result.result));
 
                 allTables.Add(tableData);
                 iterationCount++;
@@ -88,134 +88,17 @@ namespace BuilderMmdoCoursework.src.Calculator
             return allTables;
         }
 
-
-
-        #region GOMORY
-        public Tuple<SimplexSnapshot, TypeIteration> GetOneIterationForGomory()
+        void PerformPivotOperation(Tuple<int, int> cellCoordinates)
         {
-            // TableScreenshot snap = new TableScreenshot(gomoryTable.B, gomoryTable.Matrix, gomoryTable.M,
-            //      gomoryTable.F, gomoryTable.C, gomoryTable.fVars, gomoryTable.mCompleted, gomoryTable.m);
-
-
-            //ResultColIndex result = nextStep();
-            CountFuncRowValues();
-            VectorElement result = nextStepGomory();
-
-            if (result.result == TypeIteration.NotYetFound)
-            {
-                SolveMatrix(result.index);
-            }
-
-
-            SimplexSnapshot resultSnap = new SimplexSnapshot(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
-            return new Tuple<SimplexSnapshot, TypeIteration>(resultSnap, result.result);
-
-
-        }
-
-        public IterationData GetOneGomoryIteration()
-        {
-            CountFuncRowValues();
-            VectorElement result = nextStepGomory();
-
-            if (result.result == TypeIteration.NotYetFound)
-            {
-                SolveMatrix(result.index);
-            }
-
-
-            SimplexSnapshot resultSnap = new SimplexSnapshot(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
-            return new IterationData(resultSnap, result.result);
-        }
-
-
-
-
-        protected VectorElement nextStepGomory()
-        {
-
-            int rowID = FindColumn(xVals);
-
-            if (rowID != -1)
-            {
-                //M doesn't have negative values
-                //mCompleted = true;
-
-                //if (columnF != -1) //Has at least 1 negative value
-                {
-                    double[] xRow = GetCol(matrixData, rowID);
-                    int c = getIndexOfMinimalRatioGomory(xRow, funcRow); //matrix[rowID]
-
-                    if (c != -1)
-                    {
-                        //double test = matrix[rowID][c];
-                        return new VectorElement(new Tuple<int, int>(c, rowID), TypeIteration.NotYetFound);
-                    }
-                    else
-                    {
-                        return new VectorElement(null, TypeIteration.Unbounded);
-                    }
-                }
-
-            }
-            else
-                return new VectorElement(null, TypeIteration.Found);
-        }
-
-
-        public double[] GetCol(double[][] jaggedArray, int columnIndex)
-        {
-            double[] column = new double[jaggedArray.Length];
-
-            for (int i = 0; i < jaggedArray.Length; i++)
-            {
-                column[i] = jaggedArray[i][columnIndex];
-            }
-
-            return column;
-        }
-
-
-
-        int getIndexOfMinimalRatioGomory(double[] column, double[] b)
-        {
-            int index = -1;
-
-            for (int i = 0; i < column.Length; i++)
-            {
-
-                if (column[i] < 0 /*&& b[i] != 0*/)
-                {
-                    if (index == -1)
-                    {
-                        index = i;
-                    }
-                    else if (Math.Abs(b[i] / column[i]) < Math.Abs(b[index] / column[index]))
-                    {
-                        index = i;
-                    }
-                }
-
-            }
-
-            return index;
-        }
-
-
-        #endregion
-
-
-        void SolveMatrix(Tuple<int, int> cellCoordinates)
-        {
-            double[][] newMatrix = new double[matrixData.Length][];
+            double[][] newMatrix = new double[_tableau.Length][];
 
             xData[cellCoordinates.Item2] = cellCoordinates.Item1;
 
-            double[] newJRow = new double[matrixData.Length];
+            double[] newJRow = new double[_tableau.Length];
 
-            for (int i = 0; i < matrixData.Length; i++)
+            for (int i = 0; i < _tableau.Length; i++)
             {
-                newJRow[i] = matrixData[i][cellCoordinates.Item2] / matrixData[cellCoordinates.Item1][cellCoordinates.Item2];
+                newJRow[i] = _tableau[i][cellCoordinates.Item2] / _tableau[cellCoordinates.Item1][cellCoordinates.Item2];
             }
 
             double[] newB = new double[xVals.Length];
@@ -224,17 +107,17 @@ namespace BuilderMmdoCoursework.src.Calculator
             {
                 if (i == cellCoordinates.Item2)
                 {
-                    newB[i] = xVals[i] / matrixData[cellCoordinates.Item1][cellCoordinates.Item2];
+                    newB[i] = xVals[i] / _tableau[cellCoordinates.Item1][cellCoordinates.Item2];
                 }
                 else
                 {
-                    newB[i] = xVals[i] - xVals[cellCoordinates.Item2] / matrixData[cellCoordinates.Item1][cellCoordinates.Item2] * matrixData[cellCoordinates.Item1][i];
+                    newB[i] = xVals[i] - xVals[cellCoordinates.Item2] / _tableau[cellCoordinates.Item1][cellCoordinates.Item2] * _tableau[cellCoordinates.Item1][i];
                 }
             }
 
             xVals = newB;
 
-            for (int i = 0; i < matrixData.Length; i++)
+            for (int i = 0; i < _tableau.Length; i++)
             {
                 newMatrix[i] = new double[xData.Length];
                 for (int j = 0; j < xData.Length; j++)
@@ -245,80 +128,80 @@ namespace BuilderMmdoCoursework.src.Calculator
                     }
                     else
                     {
-                        newMatrix[i][j] = matrixData[i][j] - newJRow[i] * matrixData[cellCoordinates.Item1][j];
+                        newMatrix[i][j] = _tableau[i][j] - newJRow[i] * _tableau[cellCoordinates.Item1][j];
                     }
                 }
             }
 
-            matrixData = newMatrix;
-            CountFuncRowValues();
+            _tableau = newMatrix;
+            CalculateDeltas();
         }
 
 
-        void CountFuncRowValues()
+        void CalculateDeltas()
         {
-            Mcal = new double[matrixData.Length];
-            funcRow = new double[matrixData.Length];
+            Mcal = new double[_tableau.Length];
+            _zRow = new double[_tableau.Length];
 
-            for (int i = 0; i < matrixData.Length; i++)
+            for (int i = 0; i < _tableau.Length; i++)
             {
                 double sumF = 0;
                 double sumM = 0;
 
-                for (int j = 0; j < matrixData.First().Length; j++)
+                for (int j = 0; j < _tableau.First().Length; j++)
                 {
                     if (isMarr[xData[j]])
                     {
-                        sumM -= matrixData[i][j];
+                        sumM -= _tableau[i][j];
                     }
                     else
                     {
-                        sumF += functionVariables[xData[j]] * matrixData[i][j];
+                        sumF += functionVariables[xData[j]] * _tableau[i][j];
                     }
                 }
 
                 Mcal[i] = isMarr[i] ? sumM + 1 : sumM;
-                funcRow[i] = sumF - functionVariables[i];
+                _zRow[i] = sumF - functionVariables[i];
             }
         }
 
 
-        VectorElement SelectElement()
+        PivotCoordinates FindPivotElement()
         {
-            int columnM = FindColumn(Mcal);
+            int columnM = GetEnteringVariable(Mcal);
 
             if (mFound || columnM == -1)
             {
                 mFound = true;
-                int f = FindColumn(funcRow);
+                int f = GetEnteringVariable(_zRow);
 
                 if (f != -1)
                 {
-                    int row = FindRow(matrixData[f], xVals);
+                    int row = GetLeavingVariable(_tableau[f], xVals);
                     if (row != -1)
-                        return new VectorElement(new Tuple<int, int>(f, row), TypeIteration.NotYetFound);
+                        return new PivotCoordinates(new Tuple<int, int>(f, row), TypeIteration.NotYetFound);
                     else
-                        return new VectorElement(null, TypeIteration.Unbounded);
+                        return new PivotCoordinates(null, TypeIteration.Unbounded);
                 }
                 else
-                    return new VectorElement(null, TypeIteration.Found);
+                    return new PivotCoordinates(null, TypeIteration.Found);
             }
             else
             {
-                int row = FindRow(matrixData[columnM], xVals);
+                int row = GetLeavingVariable(_tableau[columnM], xVals);
 
                 if (row != -1)
                 {
-                    return new VectorElement(new Tuple<int, int>(columnM, row), TypeIteration.NotYetFound);
+                    return new PivotCoordinates(new Tuple<int, int>(columnM, row), TypeIteration.NotYetFound);
                 }
                 else
                 {
-                    return new VectorElement(null, TypeIteration.Unbounded);
+                    return new PivotCoordinates(null, TypeIteration.Unbounded);
                 }
             }
         }
 
-        int FindColumn(double[] array)
+        int GetEnteringVariable(double[] array)
         {
             int index = -1;
 
@@ -343,7 +226,7 @@ namespace BuilderMmdoCoursework.src.Calculator
             return index;
         }
 
-        int FindRow(double[] column, double[] b)
+        int GetLeavingVariable(double[] column, double[] b)
         {
             int index = -1;
 
@@ -368,8 +251,8 @@ namespace BuilderMmdoCoursework.src.Calculator
 
         public void getFunctionArray()
         {
-            double[] funcVars = new double[matrixData.Length];
-            for (int i = 0; i < matrixData.Length; i++)
+            double[] funcVars = new double[_tableau.Length];
+            for (int i = 0; i < _tableau.Length; i++)
             {
                 funcVars[i] = i < function.variables.Length ? function.variables[i] : 0;
             }
@@ -410,7 +293,7 @@ namespace BuilderMmdoCoursework.src.Calculator
             return newColumn;
         }
 
-        public void getMatrix(Constraint[] constraints)
+        public void BuildInitialTableau(LinearConstraint[] constraints)
         {
             double[][] matrix = new double[constraints.First().vars.Length][];
 
@@ -428,7 +311,7 @@ namespace BuilderMmdoCoursework.src.Calculator
 
             for (int i = 0; i < constraints.Length; i++)
             {
-                Constraint current = constraints[i];
+                LinearConstraint current = constraints[i];
 
                 Bs[i] = current.b;
 
@@ -530,7 +413,7 @@ namespace BuilderMmdoCoursework.src.Calculator
             }
 
             this.xVals = Bs;
-            this.matrixData = newMatrix;
+            this._tableau = newMatrix;
         }
     }
 }

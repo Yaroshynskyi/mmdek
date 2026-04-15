@@ -3,46 +3,46 @@ using System;
 
 namespace Mmdo.Services
 {
-    public class Constraint
+    public class LinearConstraint
     {
         public double[] vars;
         public double b;
 
-        public Constraint(double[] vars, double b)
+        public LinearConstraint(double[] vars, double b)
         {
             this.vars = vars;
             this.b = b;
         }
     }
 
-    public class TargetFunction
+    public class ObjectiveFunction
     {
         public double[] variables;
 
-        public TargetFunction(double[] variables)
+        public ObjectiveFunction(double[] variables)
         {
             this.variables = variables;
         }
     }
 
-    public class VectorElement
+    public class PivotCoordinates
     {
         public Tuple<int, int> index;
         public TypeIteration result;
 
-        public VectorElement(Tuple<int, int> index, TypeIteration result)
+        public PivotCoordinates(Tuple<int, int> index, TypeIteration result)
         {
             this.index = index;
             this.result = result;
         }
     }
 
-    public class IterationData
+    public class SimplexStep
     {
         public SimplexSnapshot table;
         public TypeIteration resType;
 
-        public IterationData(SimplexSnapshot tableScreenshot, TypeIteration result)
+        public SimplexStep(SimplexSnapshot tableScreenshot, TypeIteration result)
         {
             table = tableScreenshot;
             resType = result;

@@ -47,16 +47,19 @@ namespace BuilderMmdoCoursework
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.ConditionTable = new System.Windows.Forms.TableLayoutPanel();
             this.item2P4 = new System.Windows.Forms.NumericUpDown();
             this.item1P4 = new System.Windows.Forms.NumericUpDown();
             this.label12 = new System.Windows.Forms.Label();
+            this.item2Cost = new System.Windows.Forms.NumericUpDown();
+            this.item1Cost = new System.Windows.Forms.NumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
             this.store4 = new System.Windows.Forms.NumericUpDown();
             this.store3 = new System.Windows.Forms.NumericUpDown();
             this.store2 = new System.Windows.Forms.NumericUpDown();
             this.store1 = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -67,10 +70,8 @@ namespace BuilderMmdoCoursework
             this.item1P3 = new System.Windows.Forms.NumericUpDown();
             this.item1P2 = new System.Windows.Forms.NumericUpDown();
             this.item1P1 = new System.Windows.Forms.NumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
-            this.item1Cost = new System.Windows.Forms.NumericUpDown();
-            this.item2Cost = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
             this.SolutionGrid = new System.Windows.Forms.DataGridView();
             this.Page1Label = new System.Windows.Forms.Label();
             this.ResultLabel = new System.Windows.Forms.Label();
@@ -80,13 +81,15 @@ namespace BuilderMmdoCoursework
             this.labelCounter = new System.Windows.Forms.Label();
             this.TabController = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.CalculateButton = new System.Windows.Forms.Button();
-            this.NavGroup = new System.Windows.Forms.GroupBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.label9 = new System.Windows.Forms.Label();
+            this.NavGroup = new System.Windows.Forms.GroupBox();
             this.ConditionTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.item2P4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.item1P4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.item2Cost)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.item1Cost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.store4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.store3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.store2)).BeginInit();
@@ -97,8 +100,6 @@ namespace BuilderMmdoCoursework
             ((System.ComponentModel.ISupportInitialize)(this.item1P3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.item1P2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.item1P1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.item1Cost)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.item2Cost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.SolutionGrid)).BeginInit();
             this.TabController.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -207,6 +208,74 @@ namespace BuilderMmdoCoursework
             this.label12.Size = new System.Drawing.Size(28, 21);
             this.label12.TabIndex = 14;
             this.label12.Text = "S4";
+            // 
+            // item2Cost
+            // 
+            this.item2Cost.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.item2Cost.BackColor = System.Drawing.SystemColors.Window;
+            this.item2Cost.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.item2Cost.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.item2Cost.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.item2Cost.Location = new System.Drawing.Point(372, 213);
+            this.item2Cost.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.item2Cost.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.item2Cost.Name = "item2Cost";
+            this.item2Cost.Size = new System.Drawing.Size(80, 29);
+            this.item2Cost.TabIndex = 8;
+            this.item2Cost.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.item2Cost.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            0});
+            // 
+            // item1Cost
+            // 
+            this.item1Cost.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.item1Cost.BackColor = System.Drawing.SystemColors.Window;
+            this.item1Cost.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.item1Cost.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.item1Cost.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.item1Cost.Location = new System.Drawing.Point(254, 213);
+            this.item1Cost.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.item1Cost.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.item1Cost.Name = "item1Cost";
+            this.item1Cost.Size = new System.Drawing.Size(80, 29);
+            this.item1Cost.TabIndex = 13;
+            this.item1Cost.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.item1Cost.Value = new decimal(new int[] {
+            7,
+            0,
+            0,
+            0});
+            // 
+            // label8
+            // 
+            this.label8.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label8.Location = new System.Drawing.Point(20, 217);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(80, 21);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Прибуток";
             // 
             // store4
             // 
@@ -332,19 +401,6 @@ namespace BuilderMmdoCoursework
             this.label3.Size = new System.Drawing.Size(28, 21);
             this.label3.TabIndex = 2;
             this.label3.Text = "Р2";
-            // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label1.Location = new System.Drawing.Point(19, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 21);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Сировина";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label5
             // 
@@ -527,74 +583,6 @@ namespace BuilderMmdoCoursework
             0,
             0});
             // 
-            // label8
-            // 
-            this.label8.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label8.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.label8.Location = new System.Drawing.Point(20, 217);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(80, 21);
-            this.label8.TabIndex = 9;
-            this.label8.Text = "Прибуток";
-            // 
-            // item1Cost
-            // 
-            this.item1Cost.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.item1Cost.BackColor = System.Drawing.SystemColors.Window;
-            this.item1Cost.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.item1Cost.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.item1Cost.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.item1Cost.Location = new System.Drawing.Point(254, 213);
-            this.item1Cost.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.item1Cost.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.item1Cost.Name = "item1Cost";
-            this.item1Cost.Size = new System.Drawing.Size(80, 29);
-            this.item1Cost.TabIndex = 13;
-            this.item1Cost.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.item1Cost.Value = new decimal(new int[] {
-            7,
-            0,
-            0,
-            0});
-            // 
-            // item2Cost
-            // 
-            this.item2Cost.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.item2Cost.BackColor = System.Drawing.SystemColors.Window;
-            this.item2Cost.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.item2Cost.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.item2Cost.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.item2Cost.Location = new System.Drawing.Point(372, 213);
-            this.item2Cost.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.item2Cost.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.item2Cost.Name = "item2Cost";
-            this.item2Cost.Size = new System.Drawing.Size(80, 29);
-            this.item2Cost.TabIndex = 8;
-            this.item2Cost.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.item2Cost.Value = new decimal(new int[] {
-            5,
-            0,
-            0,
-            0});
-            // 
             // label4
             // 
             this.label4.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -607,32 +595,53 @@ namespace BuilderMmdoCoursework
             this.label4.TabIndex = 3;
             this.label4.Text = "Запас";
             // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label1.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.label1.Location = new System.Drawing.Point(19, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(81, 21);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Сировина";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // SolutionGrid
             // 
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.Window;
             dataGridViewCellStyle1.Format = "N2";
             dataGridViewCellStyle1.NullValue = null;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.MenuHighlight;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.HotTrack;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
             this.SolutionGrid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.SolutionGrid.BackgroundColor = System.Drawing.SystemColors.Menu;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GradientActiveCaption;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.SolutionGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.SolutionGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.SolutionGrid.GridColor = System.Drawing.SystemColors.WindowText;
-            this.SolutionGrid.Location = new System.Drawing.Point(33, 51);
+            this.SolutionGrid.Location = new System.Drawing.Point(41, 53);
             this.SolutionGrid.Name = "SolutionGrid";
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.SolutionGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.SolutionGrid.RowTemplate.Height = 30;
-            this.SolutionGrid.Size = new System.Drawing.Size(464, 248);
+            this.SolutionGrid.Size = new System.Drawing.Size(453, 213);
             this.SolutionGrid.TabIndex = 19;
             this.SolutionGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_CellContentClick);
             this.SolutionGrid.RowPrePaint += new System.Windows.Forms.DataGridViewRowPrePaintEventHandler(this.grid_RowPrePaint);
@@ -704,7 +713,7 @@ namespace BuilderMmdoCoursework
             this.labelCounter.AutoSize = true;
             this.labelCounter.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelCounter.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.labelCounter.Location = new System.Drawing.Point(109, 19);
+            this.labelCounter.Location = new System.Drawing.Point(108, 22);
             this.labelCounter.Name = "labelCounter";
             this.labelCounter.Size = new System.Drawing.Size(19, 21);
             this.labelCounter.TabIndex = 27;
@@ -735,6 +744,20 @@ namespace BuilderMmdoCoursework
             this.tabPage1.Text = "Умова";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // CalculateButton
+            // 
+            this.CalculateButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.CalculateButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.CalculateButton.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CalculateButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.CalculateButton.Location = new System.Drawing.Point(129, 325);
+            this.CalculateButton.Name = "CalculateButton";
+            this.CalculateButton.Size = new System.Drawing.Size(262, 58);
+            this.CalculateButton.TabIndex = 18;
+            this.CalculateButton.Text = "Розрахувати";
+            this.CalculateButton.UseVisualStyleBackColor = false;
+            this.CalculateButton.Click += new System.EventHandler(this.CalculateButton_Click);
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.label9);
@@ -751,32 +774,6 @@ namespace BuilderMmdoCoursework
             this.tabPage2.Text = "Рішення";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // CalculateButton
-            // 
-            this.CalculateButton.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.CalculateButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.CalculateButton.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.CalculateButton.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.CalculateButton.Location = new System.Drawing.Point(129, 325);
-            this.CalculateButton.Name = "CalculateButton";
-            this.CalculateButton.Size = new System.Drawing.Size(262, 58);
-            this.CalculateButton.TabIndex = 18;
-            this.CalculateButton.Text = "Розрахувати";
-            this.CalculateButton.UseVisualStyleBackColor = false;
-            this.CalculateButton.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // NavGroup
-            // 
-            this.NavGroup.Controls.Add(this.counterUp);
-            this.NavGroup.Controls.Add(this.labelCounter);
-            this.NavGroup.Controls.Add(this.counterDown);
-            this.NavGroup.Location = new System.Drawing.Point(152, 305);
-            this.NavGroup.Name = "NavGroup";
-            this.NavGroup.Size = new System.Drawing.Size(226, 53);
-            this.NavGroup.TabIndex = 28;
-            this.NavGroup.TabStop = false;
-            this.NavGroup.Text = "Ітерації";
-            // 
             // label9
             // 
             this.label9.AutoSize = true;
@@ -787,6 +784,18 @@ namespace BuilderMmdoCoursework
             this.label9.Size = new System.Drawing.Size(232, 25);
             this.label9.TabIndex = 29;
             this.label9.Text = "Оптимальний розв\'язок:";
+            // 
+            // NavGroup
+            // 
+            this.NavGroup.Controls.Add(this.counterUp);
+            this.NavGroup.Controls.Add(this.labelCounter);
+            this.NavGroup.Controls.Add(this.counterDown);
+            this.NavGroup.Location = new System.Drawing.Point(152, 294);
+            this.NavGroup.Name = "NavGroup";
+            this.NavGroup.Size = new System.Drawing.Size(226, 57);
+            this.NavGroup.TabIndex = 28;
+            this.NavGroup.TabStop = false;
+            this.NavGroup.Text = "Ітерації";
             // 
             // App
             // 
@@ -807,6 +816,8 @@ namespace BuilderMmdoCoursework
             this.ConditionTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.item2P4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.item1P4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.item2Cost)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.item1Cost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.store4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.store3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.store2)).EndInit();
@@ -817,8 +828,6 @@ namespace BuilderMmdoCoursework
             ((System.ComponentModel.ISupportInitialize)(this.item1P3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.item1P2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.item1P1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.item1Cost)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.item2Cost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.SolutionGrid)).EndInit();
             this.TabController.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

@@ -22,14 +22,16 @@ namespace BuilderMmdoCoursework
         }
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private void CalculateButton_Click(object sender, EventArgs e)
         {
+            TabController.SelectedIndex = 1;
             BuildExpression();
+
         }
 
 
-        public List<IterationData> AllIterations = new List<IterationData>();
-        public IterationData selectedTable;
+        public List<SimplexStep> AllIterations = new List<SimplexStep>();
+        public SimplexStep selectedTable;
 
         void BuildExpression()
         {
@@ -37,17 +39,17 @@ namespace BuilderMmdoCoursework
             AllIterations.Clear();
             selectedTable = null;
 
-            List<Constraint> constraints = new List<Constraint>
+            List<LinearConstraint> constraints = new List<LinearConstraint>
             {
-                new Constraint( new double[] { Convert(item1P1.Value), Convert(item2P1.Value) }, Convert(store1.Value)),
-                new Constraint( new double[] { Convert(item1P2.Value), Convert(item2P2.Value) }, Convert(store2.Value)),
-                new Constraint( new double[] { Convert(item1P3.Value), Convert(item2P3.Value) }, Convert(store3.Value)),
-                new Constraint( new double[] { Convert(item1P4.Value), Convert(item2P4.Value) }, Convert(store4.Value)),
+                new LinearConstraint( new double[] { Convert(item1P1.Value), Convert(item2P1.Value) }, Convert(store1.Value)),
+                new LinearConstraint( new double[] { Convert(item1P2.Value), Convert(item2P2.Value) }, Convert(store2.Value)),
+                new LinearConstraint( new double[] { Convert(item1P3.Value), Convert(item2P3.Value) }, Convert(store3.Value)),
+                new LinearConstraint( new double[] { Convert(item1P4.Value), Convert(item2P4.Value) }, Convert(store4.Value)),
             };
 
             double[] functionVariables = new double[] { Convert(item1Cost.Value), Convert(item2Cost.Value) };
 
-            TargetFunction function = new TargetFunction(functionVariables);
+            ObjectiveFunction function = new ObjectiveFunction(functionVariables);
             SimplexSolver simplex = new SimplexSolver(function, constraints.ToArray());
 
             var simplexRes = simplex.GetResultTable();
@@ -179,7 +181,11 @@ namespace BuilderMmdoCoursework
         }
         private void grid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            SolutionGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightSkyBlue;
+            SolutionGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = SystemColors.MenuHighlight;
+            SolutionGrid.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.White;
+            SolutionGrid.Rows[e.RowIndex].DefaultCellStyle.Font = new Font(SolutionGrid.Font, FontStyle.Bold);
+            SolutionGrid.AllowUserToResizeColumns = false;
+            SolutionGrid.AllowUserToResizeRows = false;
         }
 
         private void counterUp_Click(object sender, EventArgs e)
