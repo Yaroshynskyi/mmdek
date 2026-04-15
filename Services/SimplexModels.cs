@@ -1,7 +1,7 @@
 ﻿using BuilderMmdoCoursework.src.Calculator;
 using System;
 
-namespace Mmdo.scripts
+namespace Mmdo.Services
 {
     public class Constraint
     {
@@ -39,10 +39,10 @@ namespace Mmdo.scripts
 
     public class IterationData
     {
-        public CalculationTable table;
+        public SimplexSnapshot table;
         public TypeIteration resType;
 
-        public IterationData(CalculationTable tableScreenshot, TypeIteration result)
+        public IterationData(SimplexSnapshot tableScreenshot, TypeIteration result)
         {
             table = tableScreenshot;
             resType = result;

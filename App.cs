@@ -1,5 +1,5 @@
 ﻿using BuilderMmdoCoursework.src.Calculator;
-using Mmdo.scripts;
+using Mmdo.Services;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,9 +8,9 @@ using System.Windows.Forms;
 
 namespace BuilderMmdoCoursework
 {
-    public partial class ApplicationForm : Form
+    public partial class App : Form
     {
-        public ApplicationForm()
+        public App()
         {
             InitializeComponent();
         }
@@ -18,7 +18,7 @@ namespace BuilderMmdoCoursework
         private void FormStart_Load(object sender, EventArgs e)
         {
             labelCounter.Text = "";
-            labelResult.Text = "";
+            Result.Text = "";
         }
 
 
@@ -48,7 +48,7 @@ namespace BuilderMmdoCoursework
             double[] functionVariables = new double[] { Convert(item1Cost.Value), Convert(item2Cost.Value) };
 
             TargetFunction function = new TargetFunction(functionVariables);
-            SolutionManager simplex = new SolutionManager(function, constraints.ToArray());
+            SimplexSolver simplex = new SimplexSolver(function, constraints.ToArray());
 
             var simplexRes = simplex.GetResultTable();
 
@@ -65,24 +65,24 @@ namespace BuilderMmdoCoursework
 
         void ShowTable()
         {
-            grid.Rows.Clear();
-            CalculationTable snap = selectedTable.table;
+            SolutionGrid.Rows.Clear();
+            SimplexSnapshot snap = selectedTable.table;
 
             int addRows = 3;
 
-            grid.ColumnCount = snap.matrix.Length + addRows;
-            grid.RowHeadersVisible = false;
-            grid.ColumnHeadersVisible = false;
+            SolutionGrid.ColumnCount = snap.matrix.Length + addRows;
+            SolutionGrid.RowHeadersVisible = false;
+            SolutionGrid.ColumnHeadersVisible = false;
 
             for (int i = 0; i < snap.matrix.Length + addRows; i++)
             {
-                grid.Columns[i].Width = 50;
-                grid.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+                SolutionGrid.Columns[i].Width = 50;
+                SolutionGrid.Columns[i].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             }
 
             string[] row1 = new string[snap.matrix.Length + addRows];
 
-            row1[0] = ""; //C
+            row1[0] = "";
             row1[1] = "Базис";
             row1[2] = "A0";
 
@@ -92,7 +92,7 @@ namespace BuilderMmdoCoursework
                 row1[i] = $"A{i - (addRows - 1)}";
             }
 
-            grid.Rows.Add(row1);
+            SolutionGrid.Rows.Add(row1);
 
             for (int i = 0; i < snap.C.Length; i++)
             {
@@ -116,7 +116,7 @@ namespace BuilderMmdoCoursework
                         row[j] = Round(snap.matrix[j - addRows][i]).ToString();
                     }
                 }
-                grid.Rows.Add(row);
+                SolutionGrid.Rows.Add(row);
             }
             string[] fRow = new string[snap.matrix.Length + addRows];
             fRow[1] = "F";
@@ -125,7 +125,7 @@ namespace BuilderMmdoCoursework
             {
                 fRow[i] = Round(snap.F[i - addRows]).ToString();
             }
-            grid.Rows.Add(fRow);
+            SolutionGrid.Rows.Add(fRow);
         }
 
 
@@ -133,11 +133,11 @@ namespace BuilderMmdoCoursework
         {
             if (AllIterations.Last().resType != TypeIteration.Found)
             {
-                labelResult.Text = "Рішення не знайдено";
+                Result.Text = "Рішення не знайдено";
             }
             else
             {
-                labelResult.Text =
+                Result.Text =
                     $"\nX1 = {Round(GetX(0))}, X2 = {Round(GetX(1))}, " +
                     $"Fmax = {Math.Abs(Round(AllIterations.Last().table.fValue))}";
             }
@@ -151,7 +151,7 @@ namespace BuilderMmdoCoursework
 
         double GetX(int id)
         {
-            CalculationTable result = AllIterations.Last().table;
+            SimplexSnapshot result = AllIterations.Last().table;
             for (int i = 0; i < result.C.Length; i++)
             {
                 if (result.C[i] == id)
@@ -179,7 +179,7 @@ namespace BuilderMmdoCoursework
         }
         private void grid_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            grid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Gray;
+            SolutionGrid.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.LightSkyBlue;
         }
 
         private void counterUp_Click(object sender, EventArgs e)
@@ -200,6 +200,31 @@ namespace BuilderMmdoCoursework
         private void counterDown_Click(object sender, EventArgs e)
         {
             SetIteration(++CurrentId);
+
+        }
+
+        private void labelResult_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void grid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ConditionTable_Paint(object sender, PaintEventArgs e)
+        {
 
         }
     }

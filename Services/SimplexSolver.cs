@@ -1,4 +1,4 @@
-﻿using Mmdo.scripts;
+﻿using Mmdo.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ namespace BuilderMmdoCoursework.src.Calculator
 {
     public enum TypeIteration { Unbounded, Found, NotYetFound }
 
-    public class SolutionManager
+    public class SimplexSolver
     {
         TargetFunction function;
 
@@ -21,7 +21,7 @@ namespace BuilderMmdoCoursework.src.Calculator
         bool mFound = false;
 
 
-        public SolutionManager(TargetFunction function, Constraint[] constraints)
+        public SimplexSolver(TargetFunction function, Constraint[] constraints)
         {
             this.function = function;
 
@@ -37,7 +37,7 @@ namespace BuilderMmdoCoursework.src.Calculator
 
         }
 
-        public SolutionManager(CalculationTable screenshot, TargetFunction function)
+        public SimplexSolver(SimplexSnapshot screenshot, TargetFunction function)
         {
             this.xVals = screenshot.b;
             this.matrixData = screenshot.matrix;
@@ -66,7 +66,7 @@ namespace BuilderMmdoCoursework.src.Calculator
         {
             var allTables = new List<IterationData>();
 
-            var initialTable = new CalculationTable(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
+            var initialTable = new SimplexSnapshot(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
             IterationData tableData = (new IterationData(initialTable, TypeIteration.NotYetFound));
             allTables.Add(tableData);
 
@@ -76,7 +76,7 @@ namespace BuilderMmdoCoursework.src.Calculator
             while (result.result == TypeIteration.NotYetFound && iterationCount < 100)
             {
                 SolveMatrix(result.index);
-                CalculationTable table = new CalculationTable(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
+                SimplexSnapshot table = new SimplexSnapshot(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
                 result = SelectElement();
 
                 tableData = (new IterationData(table, result.result));
@@ -91,7 +91,7 @@ namespace BuilderMmdoCoursework.src.Calculator
 
 
         #region GOMORY
-        public Tuple<CalculationTable, TypeIteration> GetOneIterationForGomory()
+        public Tuple<SimplexSnapshot, TypeIteration> GetOneIterationForGomory()
         {
             // TableScreenshot snap = new TableScreenshot(gomoryTable.B, gomoryTable.Matrix, gomoryTable.M,
             //      gomoryTable.F, gomoryTable.C, gomoryTable.fVars, gomoryTable.mCompleted, gomoryTable.m);
@@ -107,8 +107,8 @@ namespace BuilderMmdoCoursework.src.Calculator
             }
 
 
-            CalculationTable resultSnap = new CalculationTable(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
-            return new Tuple<CalculationTable, TypeIteration>(resultSnap, result.result);
+            SimplexSnapshot resultSnap = new SimplexSnapshot(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
+            return new Tuple<SimplexSnapshot, TypeIteration>(resultSnap, result.result);
 
 
         }
@@ -124,7 +124,7 @@ namespace BuilderMmdoCoursework.src.Calculator
             }
 
 
-            CalculationTable resultSnap = new CalculationTable(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
+            SimplexSnapshot resultSnap = new SimplexSnapshot(xVals, matrixData, Mcal, funcRow, xData, functionVariables, mFound, isMarr);
             return new IterationData(resultSnap, result.result);
         }
 

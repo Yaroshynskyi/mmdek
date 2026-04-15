@@ -2,7 +2,7 @@
 
 namespace BuilderMmdoCoursework.src.Calculator
 {
-    public class CalculationTable
+    public class SimplexSnapshot
     {
         public double[] b;
         public double[][] matrix;
@@ -14,7 +14,7 @@ namespace BuilderMmdoCoursework.src.Calculator
         public bool isMDone;
         public bool[] m;
 
-        public CalculationTable(double[] b, double[][] matrix, double[] M, double[] F, int[] C, double[] fVars, bool isMDone, bool[] m)
+        public SimplexSnapshot(double[] b, double[][] matrix, double[] M, double[] F, int[] C, double[] fVars, bool isMDone, bool[] m)
         {
             this.b = Copy(b);
             this.matrix = Copy(matrix);

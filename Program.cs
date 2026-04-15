@@ -14,10 +14,10 @@ namespace BuilderMmdoCoursework
         [STAThread]
         static void Main()
         {
-            ApplicationForm.EnableVisualStyles();
+            App.EnableVisualStyles();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ApplicationForm());
+            Application.Run(new App());
         }
     }
 }
